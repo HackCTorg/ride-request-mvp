@@ -1,61 +1,71 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
 
 const userSchema = new mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-    lowercase: true
-  },
-  password: {
-    type: String,
-    required: true,
-    minlength: 6
-  },
-  phone: {
-    type: String,
-    required: true
-  },
-  role: {
-    type: String,
-    enum: ['rider', 'driver', 'admin'],
-    default: 'rider'
-  },
-  isActive: {
-    type: Boolean,
-    default: true
-  },
-  profilePicture: {
-    type: String,
-    default: ''
-  }
-}, {
+    uuid: {
+        type: String,
+        required: true,
+        unique: true
+    },
+    fullname: {
+        type: String,
+        required: true,
+    },
+    phone: {
+        type: String,
+        required: true
+    },
+    dob: {
+        type: String,
+        required: true,
+    },
+    race: {
+        type: String,
+        required: true,
+        enum: ['black', 'white', 'asian', 'latino', 'native american', 'other', 'prefer not to say']
+    },
+    maritalStatus: {
+        type: String,
+        required: true,
+        enum: ['single', 'married', 'divorced', 'widowed', 'separated', 'other', 'prefer not to say']
+    },
+    residence: {
+        current: {
+            type: String,
+            required: false
+        },
+        last: {
+            type: String,
+            required: true
+        }
+    },
+    income: {
+        current: {
+            type: String,
+            required: false
+        },
+        last: {
+            type: String,
+            required: true
+        }
+    },
+    serviceUserRole: {
+        type: [String],
+        required: true,
+        enum: ['rider', 'caregiver', 'relative', 'guardian', 'case manager', 'other']
+    },
+    veteranStatus: {
+        type: String,
+        required: false,
+        enum: ['veteran', 'not veteran', 'prefer not to say']
+    },
+    disabilityStatus: {
+        type: String,
+        required: false,
+        enum: ['yes', 'no', 'prefer not to say']
+    },
   timestamps: true
 });
 
-// Hash password before saving
-userSchema.pre('save', async function(next) {
-  if (!this.isModified('password')) return next();
-  
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
-});
-
-// Method to compare password
-userSchema.methods.comparePassword = async function(candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
-};
+userSchema.index({ uuid: 1 });
 
 module.exports = mongoose.model('User', userSchema); 
