@@ -22,7 +22,8 @@ const vehicleSchema = new mongoose.Schema({
     type: [String],
     required: true,
     enum: ['wheelchair', 'prone seating']
-  },
+  }
+}, {
   timestamps: true
 });
 

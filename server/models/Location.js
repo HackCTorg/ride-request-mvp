@@ -27,7 +27,8 @@ const locationSchema = new mongoose.Schema({
   googleMapsAddress: {
     type: String,
     required: true
-  },
+  }
+}, {
   timestamps: true
 });
 

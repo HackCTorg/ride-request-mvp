@@ -45,7 +45,8 @@ const serviceProviderSchema = new mongoose.Schema({
   faxPhone: {
     type: String,
     required: false
-  },
+  }
+}, {
   timestamps: true
 });
 

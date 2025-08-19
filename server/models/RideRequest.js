@@ -73,7 +73,7 @@ const rideRequestSchema = new mongoose.Schema({
     required: true
   },
   rideStatus: {
-    type: String,
+    type: Number,
     required: true,
     enum: Object.values(RIDE_STATUSES)
   },
@@ -82,14 +82,15 @@ const rideRequestSchema = new mongoose.Schema({
     required: true,
   },
   rideRequestStatus: {
-    type: String,
+    type: Number,
     required: true,
     enum: Object.values(RIDE_REQUEST_STATUSES)
   },
   notes: {
     type: String,
     required: false
-  },
+  }
+}, {
   timestamps: true
 });
 

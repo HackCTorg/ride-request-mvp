@@ -1,6 +1,6 @@
 const express = require('express');
 const { body, validationResult } = require('express-validator');
-const Ride = require('../models/Ride');
+const RideRequest = require('../models/RideRequest');
 const { auth, authorize } = require('../middleware/auth');
 
 const router = express.Router();
@@ -24,24 +24,31 @@ router.post('/', auth, authorize('rider'), [
     const perKmRate = 2;
     const estimatedFare = baseFare + (estimatedDistance * perKmRate);
 
-    const ride = new Ride({
-      rider: req.user._id,
-      pickupLocation,
-      destination,
+    const rideRequest = new RideRequest({
+      uuid: Date.now(), // Generate a unique UUID
+      serviceUserUuid: req.user.uuid,
+      serviceUserRole: req.user.serviceUserRole[0], // Take first role
+      pickupAddress: pickupLocation.address,
+      dropOffAddress: destination.address,
       notes,
-      estimatedDuration,
-      estimatedDistance,
-      fare: {
-        amount: estimatedFare,
-        currency: 'USD'
-      }
+      roundTrip: false, // Default to false, can be made configurable
+      pickupRequestedTime: new Date().toISOString(),
+      dropOffRequestedTime: new Date().toISOString(),
+      rideStartedActualTime: new Date(),
+      pickupActualTime: new Date(),
+      dropOffActualTime: new Date(),
+      rideCompleteRequestedTime: new Date(),
+      rideCompleteActualTime: new Date(),
+      rideStatus: 0, // REQUEST_IN_PROGRESS
+      purpose: 'General transportation',
+      rideRequestStatus: 100 // ALL_RIDE_REQUEST_OPEN
     });
 
-    await ride.save();
+    await rideRequest.save();
 
     res.status(201).json({
-      message: 'Ride requested successfully',
-      ride
+      message: 'Ride request created successfully',
+      rideRequest
     });
   } catch (error) {
     console.error('Request ride error:', error);
@@ -57,27 +64,25 @@ router.get('/my-rides', auth, async (req, res) => {
 
     let query = {};
     
-    if (req.user.role === 'rider') {
-      query.rider = req.user._id;
-    } else if (req.user.role === 'driver') {
-      query.driver = req.user._id;
+    if (req.user.serviceUserRole.includes('rider')) {
+      query.serviceUserUuid = req.user.uuid;
+    } else if (req.user.serviceUserRole.includes('driver')) {
+      query.assignedDriverUuid = req.user.uuid;
     }
 
     if (status) {
       query.status = status;
     }
 
-    const rides = await Ride.find(query)
-      .populate('rider', 'name email phone')
-      .populate('driver', 'name email phone')
+    const rideRequests = await RideRequest.find(query)
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit));
 
-    const total = await Ride.countDocuments(query);
+    const total = await RideRequest.countDocuments(query);
 
     res.json({
-      rides,
+      rideRequests,
       pagination: {
         current: parseInt(page),
         total: Math.ceil(total / limit),
@@ -91,91 +96,90 @@ router.get('/my-rides', auth, async (req, res) => {
   }
 });
 
-// Get available rides for drivers
+// Get available ride requests for drivers
 router.get('/available', auth, authorize('driver'), async (req, res) => {
   try {
-    const rides = await Ride.find({ 
-      status: 'pending',
-      driver: { $exists: false }
+    const rideRequests = await RideRequest.find({ 
+      rideRequestStatus: 100, // ALL_RIDE_REQUEST_OPEN
+      assignedDriverUuid: { $exists: false }
     })
-    .populate('rider', 'name phone')
-    .sort({ requestTime: -1 });
+    .sort({ createdAt: -1 });
 
-    res.json(rides);
+    res.json(rideRequests);
   } catch (error) {
-    console.error('Get available rides error:', error);
+    console.error('Get available ride requests error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Accept a ride (driver)
+// Accept a ride request (driver)
 router.put('/:rideId/accept', auth, authorize('driver'), async (req, res) => {
   try {
-    const ride = await Ride.findById(req.params.rideId);
+    const rideRequest = await RideRequest.findOne({ uuid: req.params.rideId });
     
-    if (!ride) {
-      return res.status(404).json({ message: 'Ride not found' });
+    if (!rideRequest) {
+      return res.status(404).json({ message: 'Ride request not found' });
     }
 
-    if (ride.status !== 'pending') {
-      return res.status(400).json({ message: 'Ride is not available' });
+    if (rideRequest.rideRequestStatus !== 100) { // ALL_RIDE_REQUEST_OPEN
+      return res.status(400).json({ message: 'Ride request is not available' });
     }
 
-    if (ride.driver) {
-      return res.status(400).json({ message: 'Ride already accepted' });
+    if (rideRequest.assignedDriverUuid) {
+      return res.status(400).json({ message: 'Ride request already accepted' });
     }
 
-    ride.driver = req.user._id;
-    ride.status = 'accepted';
-    await ride.save();
+    rideRequest.assignedDriverUuid = req.user.uuid;
+    rideRequest.rideRequestStatus = 200; // DRIVER_NEEDED
+    await rideRequest.save();
 
     res.json({
-      message: 'Ride accepted successfully',
-      ride
+      message: 'Ride request accepted successfully',
+      rideRequest
     });
   } catch (error) {
-    console.error('Accept ride error:', error);
+    console.error('Accept ride request error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Update ride status
+// Update ride request status
 router.put('/:rideId/status', auth, async (req, res) => {
   try {
     const { status } = req.body;
-    const ride = await Ride.findById(req.params.rideId);
+    const rideRequest = await RideRequest.findOne({ uuid: req.params.rideId });
 
-    if (!ride) {
-      return res.status(404).json({ message: 'Ride not found' });
+    if (!rideRequest) {
+      return res.status(404).json({ message: 'Ride request not found' });
     }
 
-    // Check if user is authorized to update this ride
-    if (ride.rider.toString() !== req.user._id.toString() && 
-        ride.driver?.toString() !== req.user._id.toString()) {
+    // Check if user is authorized to update this ride request
+    if (rideRequest.serviceUserUuid !== req.user.uuid && 
+        rideRequest.assignedDriverUuid !== req.user.uuid) {
       return res.status(403).json({ message: 'Not authorized' });
     }
 
     // Update status and timestamps
-    ride.status = status;
-    if (status === 'in-progress') {
-      ride.pickupTime = new Date();
-    } else if (status === 'completed') {
-      ride.dropoffTime = new Date();
+    rideRequest.rideStatus = status;
+    if (status === 200) { // RIDE_STARTED
+      rideRequest.rideStartedActualTime = new Date();
+    } else if (status === 500) { // RIDE_COMPLETE
+      rideRequest.rideCompleteActualTime = new Date();
     }
 
-    await ride.save();
+    await rideRequest.save();
 
     res.json({
-      message: 'Ride status updated successfully',
-      ride
+      message: 'Ride request status updated successfully',
+      rideRequest
     });
   } catch (error) {
-    console.error('Update ride status error:', error);
+    console.error('Update ride request status error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Rate a completed ride
+// Rate a completed ride request
 router.post('/:rideId/rate', auth, [
   body('rating').isInt({ min: 1, max: 5 }).withMessage('Rating must be between 1 and 5'),
   body('review').optional().trim()
@@ -187,54 +191,49 @@ router.post('/:rideId/rate', auth, [
     }
 
     const { rating, review } = req.body;
-    const ride = await Ride.findById(req.params.rideId);
+    const rideRequest = await RideRequest.findOne({ uuid: req.params.rideId });
 
-    if (!ride) {
-      return res.status(404).json({ message: 'Ride not found' });
+    if (!rideRequest) {
+      return res.status(404).json({ message: 'Ride request not found' });
     }
 
-    if (ride.rider.toString() !== req.user._id.toString()) {
+    if (rideRequest.serviceUserUuid !== req.user.uuid) {
       return res.status(403).json({ message: 'Not authorized' });
     }
 
-    if (ride.status !== 'completed') {
-      return res.status(400).json({ message: 'Can only rate completed rides' });
+    if (rideRequest.rideStatus !== 500) { // RIDE_COMPLETE
+      return res.status(400).json({ message: 'Can only rate completed ride requests' });
     }
 
-    ride.rating = rating;
-    ride.review = review;
-    await ride.save();
-
+    // Note: Rating and review fields don't exist in RideRequest model yet
+    // You may need to add these fields to the schema
     res.json({
-      message: 'Ride rated successfully',
-      ride
+      message: 'Rating functionality not yet implemented for ride requests'
     });
   } catch (error) {
-    console.error('Rate ride error:', error);
+    console.error('Rate ride request error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });
 
-// Get ride by ID
+// Get ride request by ID
 router.get('/:rideId', auth, async (req, res) => {
   try {
-    const ride = await Ride.findById(req.params.rideId)
-      .populate('rider', 'name email phone')
-      .populate('driver', 'name email phone');
+    const rideRequest = await RideRequest.findOne({ uuid: req.params.rideId });
 
-    if (!ride) {
-      return res.status(404).json({ message: 'Ride not found' });
+    if (!rideRequest) {
+      return res.status(404).json({ message: 'Ride request not found' });
     }
 
-    // Check if user is authorized to view this ride
-    if (ride.rider.toString() !== req.user._id.toString() && 
-        ride.driver?.toString() !== req.user._id.toString()) {
+    // Check if user is authorized to view this ride request
+    if (rideRequest.serviceUserUuid !== req.user.uuid && 
+        rideRequest.assignedDriverUuid !== req.user.uuid) {
       return res.status(403).json({ message: 'Not authorized' });
     }
 
-    res.json(ride);
+    res.json(rideRequest);
   } catch (error) {
-    console.error('Get ride error:', error);
+    console.error('Get ride request error:', error);
     res.status(500).json({ message: 'Server error' });
   }
 });

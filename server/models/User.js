@@ -63,6 +63,7 @@ const userSchema = new mongoose.Schema({
         required: false,
         enum: ['yes', 'no', 'prefer not to say']
     },
+}, {
   timestamps: true
 });
 
