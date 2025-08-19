@@ -1,8 +1,9 @@
 const mongoose = require('mongoose');
 const { RIDE_STATUSES } = require('../constants/rideStatuses');
+const { RIDE_REQUEST_STATUSES } = require('../constants/rideRequestStatuses');
 
 const rideRequestSchema = new mongoose.Schema({
-  rideRequestUuid: {
+  uuid: {
     type: Number,
     required: true,
     unique: true
@@ -71,7 +72,7 @@ const rideRequestSchema = new mongoose.Schema({
     type: Date,
     required: true
   },
-  status: {
+  rideStatus: {
     type: String,
     required: true,
     enum: Object.values(RIDE_STATUSES)
@@ -79,6 +80,11 @@ const rideRequestSchema = new mongoose.Schema({
   purpose: {
     type: String,
     required: true,
+  },
+  rideRequestStatus: {
+    type: String,
+    required: true,
+    enum: Object.values(RIDE_REQUEST_STATUSES)
   },
   notes: {
     type: String,
@@ -88,6 +94,6 @@ const rideRequestSchema = new mongoose.Schema({
 });
 
 // Index for efficient queries
-rideRequestSchema.index({ rideRequestUuid: 1 });
+rideRequestSchema.index({ uuid: 1 });
 
 module.exports = mongoose.model('RideRequest', rideRequestSchema); 

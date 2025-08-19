@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const vehicleSchema = new mongoose.Schema({
-  vehicleUuid: {
+  uuid: {
     type: Number,
     required: true,
     unique: true
@@ -27,7 +27,7 @@ const vehicleSchema = new mongoose.Schema({
 });
 
 // Index for efficient queries
-vehicleSchema.index({ vehicleUuid: 1 });
+vehicleSchema.index({ uuid: 1 });
 vehicleSchema.index({ fleetId: 1 });
 
 module.exports = mongoose.model('Vehicle', vehicleSchema); 

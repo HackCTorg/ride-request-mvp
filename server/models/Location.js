@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const locationSchema = new mongoose.Schema({
-  locationUuid: {
+  uuid: {
     type: Number,
     required: true,
     unique: true
@@ -32,6 +32,6 @@ const locationSchema = new mongoose.Schema({
 });
 
 // Index for efficient queries
-locationSchema.index({ locationUuid: 1 });
+locationSchema.index({ uuid: 1 });
 
 module.exports = mongoose.model('Location', locationSchema); 
