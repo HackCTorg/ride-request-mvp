@@ -8,6 +8,8 @@ require('dotenv').config();
 const authRoutes = require('./routes/auth');
 const rideRoutes = require('./routes/rides');
 const userRoutes = require('./routes/users');
+const rideRequestsRoutes = require('./routes/riderequests');
+const providersRoutes = require('./routes/providers');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -31,9 +33,11 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ride-requ
 app.use('/api/auth', authRoutes);
 app.use('/api/rides', rideRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/riderequests', rideRequestsRoutes);
+app.use('/api/providers', providersRoutes);
 
 // Health check
-app.get('/api/health', (req, res) => {
+app.get('/health', (req, res) => {
   res.json({ status: 'OK', message: 'Server is running' });
 });
 
