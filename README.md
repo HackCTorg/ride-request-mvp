@@ -30,6 +30,5 @@ Updating the .env file:
 * Click connect
 * Choose Drivers
 * Copy the connection string
-* Paste the string as the MONGO_URI in the .env
-Note that you will need to fill in the <db_password> in the string, this will be given to you when you make the cluster, so keep it somewhere
-The database name variable in the .env should remain “database”, unless you choose to change it
+* Paste the string as the MONGO_URI in the .env - Note that you will need to fill in the <db_password> in the string, this will be given to you when you make the cluster, so keep it somewhere
+* The database name variable in the .env should remain “database”, unless you choose to change it
