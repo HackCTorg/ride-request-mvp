@@ -1,5 +1,21 @@
 # ride-request-mvp
-Initial repository to create the ride request MVP
+
+## Installation Steps
+
+(On Linux - if using Homebrew, please utilize appropriate commands)
+* sudo apt update
+* sudo apt install npm nodejs
+* node run install all
+* node server/index.js
+
+Create an account on MongoDB Atlas. Set it up as a Free learning
+account. Pick Node.js and create database user, then Select Drivers
+and you'll get the connection string and password you need to copy.
+
+Optional: npm install mongodb
+
+## MongoDB Instructions
+
 Switching MongoDB Accounts:
 Log into MongoDB Atlas
 Create cluster
