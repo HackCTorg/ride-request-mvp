@@ -9,6 +9,17 @@ export const fetchRideRequests = async () => {
     }
 }
 
+export const fetchRideRequest = async (requestId) => {
+    try {
+        const response = await fetch(`/api/riderequests/get-ride-request/${requestId}`);
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(`Error fetching ride request ${requestId}`, error);
+        return [];
+    }
+}
+
 export const createRideRequest = async (rideRequest) => {
     try {
         const response = await fetch('/api/riderequests/create-ride-request', {

@@ -33,3 +33,8 @@ export const fetchUsers = async () => {
         return [];
     }
 }
+
+export const filterUsers = (users, searchTerm) => users.filter(user =>
+    user.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    user.uuid.toLowerCase().includes(searchTerm.toLowerCase())
+);

@@ -15,7 +15,13 @@ const Navbar = () => {
 
           {/* Simple Navigation */}
           <div className="flex items-center space-x-6">
-            <Link 
+            <Link
+                to="/dashboard"
+                className="text-gray-600 hover:text-primary-600 transition-colors"
+            >
+              Dashboard
+            </Link>
+            <Link
               to="/" 
               className="text-gray-600 hover:text-primary-600 transition-colors"
             >

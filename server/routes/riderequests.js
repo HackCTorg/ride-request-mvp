@@ -19,6 +19,16 @@ async function connectDB() {
 
 connectDB().catch(console.error);
 
+router.get('/get-ride-request/:id', async (req, res) => {
+    try {
+        const rideRequest = await rideRequestsCollection.findOne({uuid: parseInt(req.params.id)});
+        res.json(rideRequest);
+    } catch (error) {
+        console.error(`Error fetching ride request: ${req.params.id}`, error);
+        res.status(500).json({ message: 'Error fetching ride requests' });
+    }
+});
+
 router.get('/get-ride-requests', async (req, res) => {
     try {
         const rideRequests = await rideRequestsCollection.find({}).toArray();

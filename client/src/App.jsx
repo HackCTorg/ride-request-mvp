@@ -4,6 +4,7 @@ import { AuthProvider, useAuth } from './contexts/AuthContext'
 import Navbar from './components/Navbar'
 import Home from './pages/Home'
 import ServiceProviderHome from './pages/ServiceProviderHome'
+import Dashboard from './pages/Dashboard'
 import UserHome from './pages/UserHome'
 
 
@@ -16,6 +17,7 @@ function AppRoutes() {
           <Routes>
             <Route path="/" element={<UserHome />} />
             <Route path="/service-provider" element={<ServiceProviderHome />} />
+            <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </main>
       </div>

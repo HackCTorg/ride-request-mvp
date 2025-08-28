@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { fetchRideRequests } from '../utils/riderequest';
 import { fetchUsers } from '../utils/users';
 
-export default function RideRequests() {
+export default function RideRequests({callbackFn}) {
 
     const [rideRequests, setRideRequests] = useState([]);
     const [users, setUsers] = useState([]);
@@ -75,6 +75,12 @@ export default function RideRequests() {
                                 new Date(rideRequest.pickupRequestedTime).toLocaleString() : 
                                 'No pickup time set'
                             }</td>
+                            <td className='text-left'>
+                                <button onClick={()=>callbackFn(rideRequest.uuid)}>Assign driver</button>
+                            </td>
+                            <td className='text-left'>
+                                <button>Assign vehicle</button>
+                            </td>
                         </tr>
                     ))}
                 </tbody>
