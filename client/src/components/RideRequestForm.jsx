@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { createRideRequest } from '../utils/riderequest';
+import {createDocument} from "../utils/generic-endpoint";
 
 export default function RideRequestForm({ selectedUser, setShowRideRequestForm, setShowBaseForm, setShowUserForm }) {
     const [formData, setFormData] = useState({
@@ -94,13 +94,7 @@ export default function RideRequestForm({ selectedUser, setShowRideRequestForm, 
                 notes: `Accessibility: ${formData.accessibilityNeeds || 'None'}. Wait time: ${formData.estimatedWaitTime || 'Not specified'}`
             };
 
-            const response = await fetch('/api/riderequests/create-ride-request', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(rideRequestData)
-            });
+            const response = await createDocument("riderequests", rideRequestData);
 
             if (response.ok) {
                 alert('Ride request created successfully!');

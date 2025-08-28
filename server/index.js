@@ -3,13 +3,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
 const morgan = require('morgan');
+
 require('dotenv').config();
 
-const authRoutes = require('./routes/auth');
-const rideRoutes = require('./routes/rides');
-const userRoutes = require('./routes/users');
-const rideRequestsRoutes = require('./routes/riderequests');
-const providersRoutes = require('./routes/providers');
+const createRouter = require('./routes/generic-route');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -29,12 +26,13 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ride-requ
 .then(() => console.log('Connected to MongoDB'))
 .catch(err => console.error('MongoDB connection error:', err));
 
-// Routes
-app.use('/api/auth', authRoutes);
-app.use('/api/rides', rideRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/riderequests', rideRequestsRoutes);
-app.use('/api/providers', providersRoutes);
+(endpoints => {
+  for (let endpoint of endpoints) {
+    let router = createRouter(endpoint);
+    app.use(`/api/${endpoint}`, router);
+  }
+})(["users", "providers", "riderequests", "vehicles"])
+
 
 // Health check
 app.get('/health', (req, res) => {
@@ -49,4 +47,4 @@ app.use((err, req, res, next) => {
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
-}); 
+});

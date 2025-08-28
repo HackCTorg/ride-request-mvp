@@ -6,6 +6,11 @@ const vehicleSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  displayName: {
+    type: String,
+    required: true,
+    unique: true
+  },
   fleetId: {
     type: Number,
     required: true
@@ -18,7 +23,7 @@ const vehicleSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  accessiblilityFeatures: {
+  accessibilityFeatures: {
     type: [String],
     required: true,
     enum: ['wheelchair', 'prone seating']
