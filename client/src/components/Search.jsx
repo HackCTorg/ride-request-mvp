@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-export default function Search({ onUserSelect, fetchDataFn, filterElementsFn, placeHolderText, renderElementFn }) {
+export default function Search({ fetchDataFn, filterElementsFn, placeHolderText, renderElementFn }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [elements, setElements] = useState([]);
     const [filteredElements, setFilteredElements] = useState([]);
@@ -51,12 +51,9 @@ export default function Search({ onUserSelect, fetchDataFn, filterElementsFn, pl
         }
     };
 
-    const handleUserSelect = (user) => {
-        setSearchTerm(user.fullname);
+    const handleElementSelect = (user) => {
+        setSearchTerm(user.fullname || user.fullName);
         setIsDropdownOpen(false);
-        if (onUserSelect) {
-            onUserSelect(user);
-        }
     };
 
     const handleInputChange = (e) => {
@@ -98,7 +95,7 @@ export default function Search({ onUserSelect, fetchDataFn, filterElementsFn, pl
                             No elements found
                         </div>
                     ) : (
-                        filteredElements.map(element => renderElementFn(element, handleUserSelect))
+                        filteredElements.map(element => renderElementFn(element, handleElementSelect))
                     )}
                 </div>
             )}

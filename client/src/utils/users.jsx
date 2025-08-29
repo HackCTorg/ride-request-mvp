@@ -23,6 +23,7 @@ export const createUser = async (user) => {
     }
 }
 
+//TODO: fuzzy search on server side
 export const fetchUsers = async () => {
     try {
         const response = await fetch('/api/users/get-users');

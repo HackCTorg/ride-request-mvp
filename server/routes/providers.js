@@ -40,4 +40,14 @@ router.get('/get-providers', async (req, res) => {
     }
 });
 
+router.get('/get-drivers', async (req, res) => {
+    try {
+        const drivers = await providersCollection.find({role: "driver"}).toArray();
+        res.json(drivers);
+    } catch (error) {
+        console.error('Error fetching drivers:', error);
+        res.status(500).json({ message: 'Error fetching drivers' });
+    }
+});
+
 module.exports = router;

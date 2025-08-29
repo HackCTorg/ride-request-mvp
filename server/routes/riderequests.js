@@ -62,4 +62,17 @@ router.delete('/delete-ride-request/:uuid', async (req, res) => {
     }
 });
 
+router.put('/update-ride-request/:uuid', async (req, res) => {
+    try {
+        const uuid = req.params.uuid;
+        const replacementDoc = {$set: req.body};
+        const filter = {uuid: parseInt(uuid)};
+        const result = await rideRequestsCollection.updateOne(filter, replacementDoc);
+        res.json(result);
+    } catch (error) {
+        console.error('Error updating ride request:', error);
+        res.status(500).json({ message: 'Error updating ride request' });
+    }
+});
+
 module.exports = router;

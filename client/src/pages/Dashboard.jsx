@@ -6,10 +6,9 @@ export default function Dashboard() {
 
     const [selectedRideRequest, setSelectedRideRequest] = useState(false);
 
-    function asdf(request)
+    function cancelAssignDriver()
     {
-        console.log(request);
-        setSelectedRideRequest(request);
+        setSelectedRideRequest(null);
     }
 
     return (
@@ -17,10 +16,13 @@ export default function Dashboard() {
         <div className='bg-gray-100 h-full w-full flex flex-col'>
             <h1>ServiceProviderHome</h1>
             {selectedRideRequest && (
-                <AssignDriver selectedRideRequestId={selectedRideRequest} />
+                <AssignDriver
+                    selectedRideRequestId={selectedRideRequest}
+                    cancelFn= {cancelAssignDriver}
+                />
             )}
             {!selectedRideRequest && (
-                <RideRequests callbackFn={asdf} />
+                <RideRequests callbackFn={setSelectedRideRequest} />
             )}
         </div>
     );

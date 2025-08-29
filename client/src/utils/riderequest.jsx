@@ -24,6 +24,9 @@ export const createRideRequest = async (rideRequest) => {
     try {
         const response = await fetch('/api/riderequests/create-ride-request', {
             method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
             body: JSON.stringify(rideRequest),
         });
         if (response.ok) {
@@ -32,6 +35,30 @@ export const createRideRequest = async (rideRequest) => {
         } else {
             const errorData = await response.json();
             alert(`Error creating user: ${errorData.message}`);
+            return false;
+        }
+    }
+    catch (error) {
+        console.error('Error creating ride request:', error);
+        return false;
+    }
+}
+
+export const updateRideRequest = async (rideRequestUuid, replacementDoc) => {
+    try {
+        const response = await fetch(`/api/riderequests/update-ride-request/${rideRequestUuid}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(replacementDoc),
+        });
+        if (response.ok) {
+            alert('Ride request updated successfully!');
+            return true;
+        } else {
+            const errorData = await response.json();
+            alert(`Error updating ride request: ${errorData.message}`);
             return false;
         }
     }

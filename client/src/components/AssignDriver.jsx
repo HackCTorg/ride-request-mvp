@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import {fetchRideRequest, fetchRideRequests} from '../utils/riderequest';
+import {fetchRideRequest, updateRideRequest} from '../utils/riderequest';
 import {fetchUsers} from "../utils/users";
+import DriverSearch from "./DriverSearch";
 
-export default function AssignDriver({selectedRideRequestId, rider}) {
+export default function AssignDriver({selectedRideRequestId, cancelFn}) {
 
     const [selectedRideRequest, setSelectedRideRequest] = useState(selectedRideRequestId);
-    const [driver, setDriver] = useState([]);
-    const [vehicle, vehicles] = useState([]);
+    const [selectedDriver, setSelectedDriver] = useState([]);
+    const [selectedVehicle, selectedVehicles] = useState([]);
     const [users, setUsers] = useState([]);
 
     const getUsers= async () => {
@@ -29,8 +30,18 @@ export default function AssignDriver({selectedRideRequestId, rider}) {
         }
     }
 
-    useEffect(() => {
+    function handleDriverSelect(driver)
+    {
+        setSelectedDriver(driver);
+    }
 
+    async function submitSelectedDriver()
+    {
+        const documentUpdate = {driverUuid: selectedDriver.uuid.toString()};
+        await updateRideRequest(selectedRideRequestId, documentUpdate);
+    }
+
+    useEffect(() => {
         getRideRequest();
         getUsers();
         const interval = setInterval(async () => {
@@ -52,6 +63,18 @@ export default function AssignDriver({selectedRideRequestId, rider}) {
                 <p>{users.find(user => user.uuid === selectedRideRequest.serviceUserUuid)?.fullname} at {selectedRideRequest.pickupAddress}</p>
                 <p>{new Date(selectedRideRequest.pickupRequestedTime).toLocaleString()}</p>
 
+                <DriverSearch onDriverSelect={handleDriverSelect} />
+
+                {selectedDriver && (
+                    <div className='flex flex-row gap-4 w-full '>
+                        <button
+                            onClick={cancelFn}
+                            className='bg-gray-300 hover:bg-gray-400 text-gray-800 p-2 text-md rounded-md w-[50%]'>Cancel</button>
+                        <button
+                            onClick={submitSelectedDriver}
+                            className='bg-blue-500 hover:bg-blue-600 text-white p-2 text-md rounded-md w-[50%]'>Submit</button>
+                    </div>
+                )}
             </div>
         </div>
     );

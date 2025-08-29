@@ -35,3 +35,19 @@ export const fetchProviders = async () => {
         return [];
     }
 }
+
+export const fetchDrivers = async () => {
+    try {
+        const response = await fetch('/api/providers/get-providers');
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error('Error fetching drivers:', error);
+        return [];
+    }
+}
+
+export const filterDrivers = (drivers, searchTerm) => drivers.filter(driver =>
+    driver.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    driver.uuid.toLowerCase().includes(searchTerm.toLowerCase())
+);
