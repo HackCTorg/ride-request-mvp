@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 import DriverSearch from "./DriverSearch";
 import {fetchCollection, fetchDocument, updateDocument} from "../utils/generic-endpoint";
+import VehicleSearch from "./VehicleSearch";
 
 export default function AssignDriver({selectedRideRequestId, cancelFn}) {
 
     const [selectedRideRequest, setSelectedRideRequest] = useState(selectedRideRequestId);
     const [selectedDriver, setSelectedDriver] = useState([]);
+    const [selectedVehicle, setSelectedVehicle] = useState([]);
     const [users, setUsers] = useState([]);
 
     const getUsers= async () => {
@@ -18,15 +20,15 @@ export default function AssignDriver({selectedRideRequestId, cancelFn}) {
         setSelectedRideRequest(rideRequest);
     }
 
-    function handleDriverSelect(driver)
-    {
-        setSelectedDriver(driver);
-    }
-
     async function submitSelectedDriver()
     {
         const documentUpdate = {driverUuid: selectedDriver.uuid.toString()};
-        await updateDocument("riderequests", selectedRideRequestId, documentUpdate);
+        await Promise.allSettled([
+            updateDocument("riderequests", selectedRideRequestId, {driverUuid: selectedDriver.uuid.toString()}),
+            updateDocument("riderequests", selectedRideRequestId, {vehicleUuid: selectedVehicle.uuid.toString()})
+        ])
+
+        cancelFn();
     }
 
     useEffect(() => {
@@ -51,9 +53,11 @@ export default function AssignDriver({selectedRideRequestId, cancelFn}) {
                 <p>{users.find(user => user.uuid === selectedRideRequest.serviceUserUuid)?.fullname} at {selectedRideRequest.pickupAddress}</p>
                 <p>{new Date(selectedRideRequest.pickupRequestedTime).toLocaleString()}</p>
 
-                <DriverSearch onDriverSelect={handleDriverSelect} />
+                <DriverSearch onDriverSelect={setSelectedDriver} />
 
-                {selectedDriver && (
+                <VehicleSearch onVehicleSelect={setSelectedVehicle} />
+
+                {selectedDriver && selectedVehicle && (
                     <div className='flex flex-row gap-4 w-full '>
                         <button
                             onClick={cancelFn}

@@ -1,30 +1,38 @@
 import Search from './Search';
+import {fetchCollection} from "../utils/generic-endpoint";
 
 export default function VehicleSearch({onVehicleSelect}) {
 
     return (
         <Search
-            fetchDataFn={fetchDrivers}
-            filterElementsFn={filterDrivers}
-            renderElementFn={renderDriver}
-            placeHolderText="Start typing driver name or ID"
+            fetchDataFn={()=> fetchCollection("vehicles")}
+            filterElementsFn={filterVehicles}
+            renderElementFn={renderVehicle}
+            placeHolderText="Start typing vehicle name or ID"
         />
     )
 
-    function renderDriver(driver, handleElementSelect)
+    function filterVehicles(vehicles, searchTerm)
+    {
+        return vehicles.filter(vehicle =>
+            vehicle.displayName.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }
+
+    function renderVehicle(vehicle, handleElementSelect)
     {
         return (
             <div
-                key={driver.uuid}
+                key={vehicle.uuid}
                 onClick={() => {
-                    handleElementSelect(driver)
-                    onVehicleSelect(driver)
+                    handleElementSelect(vehicle)
+                    onVehicleSelect(vehicle)
                 }}
                 className="px-4 py-2 hover:bg-gray-100 cursor-pointer border-b border-gray-100 last:border-b-0"
             >
-                <div className="font-medium text-gray-900">{driver.fullName}</div>
+                <div className="font-medium text-gray-900">{vehicle.displayName}</div>
                 <div className="text-sm text-gray-500">
-                    UUID: {driver.uuid} • Phone: {driver.phone}
+                    UUID: {vehicle.uuid}
                 </div>
             </div>
         )

@@ -4,9 +4,9 @@ import AssignDriver from "../components/AssignDriver";
 
 export default function Dashboard() {
 
-    const [selectedRideRequest, setSelectedRideRequest] = useState(false);
+    const [selectedRideRequest, setSelectedRideRequest] = useState(null);
 
-    function cancelAssignDriver()
+    function closeAssignDriverPanel()
     {
         setSelectedRideRequest(null);
     }
@@ -18,7 +18,7 @@ export default function Dashboard() {
             {selectedRideRequest && (
                 <AssignDriver
                     selectedRideRequestId={selectedRideRequest}
-                    cancelFn= {cancelAssignDriver}
+                    cancelFn= {closeAssignDriverPanel}
                 />
             )}
             {!selectedRideRequest && (

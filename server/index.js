@@ -31,7 +31,7 @@ mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/ride-requ
     let router = createRouter(endpoint);
     app.use(`/api/${endpoint}`, router);
   }
-})(["users", "providers", "riderequests"])
+})(["users", "providers", "riderequests", "vehicles"])
 
 
 // Health check

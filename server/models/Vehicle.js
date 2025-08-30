@@ -6,6 +6,11 @@ const vehicleSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
+  displayName: {
+    type: String,
+    required: true,
+    unique: true
+  },
   fleetId: {
     type: Number,
     required: true

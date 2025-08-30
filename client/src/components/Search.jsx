@@ -51,8 +51,8 @@ export default function Search({ fetchDataFn, filterElementsFn, placeHolderText,
         }
     };
 
-    const handleElementSelect = (user) => {
-        setSearchTerm(user.fullname || user.fullName);
+    const handleElementSelect = (element) => {
+        setSearchTerm(element.fullname || element.fullName || element.displayName); //TODO: better
         setIsDropdownOpen(false);
     };
 
