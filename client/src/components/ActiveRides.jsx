@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react';
 import {fetchCollection} from "../utils/generic-endpoint";
 
-export default function RideRequests({callbackFn}) {
+export default function ActiveRides({callbackFn}) {
 
-    const [rideRequests, setRideRequests] = useState([]);
+    const [ride, setRides] = useState([]);
+    const [users, setUsers] = useState([]);
 
     const getRideRequests = async () => {
         console.log('Fetching ride requests...');
@@ -20,11 +21,18 @@ export default function RideRequests({callbackFn}) {
         }
     }
 
+    const getUsers= async () => {
+        const users = await fetchCollection("users");
+        setUsers(users);
+    }
+
     useEffect(() => {
 
         getRideRequests();
+        getUsers();
         const interval = setInterval(async () => {
             getRideRequests();
+            getUsers();
         }, 5000);
         
         return () => clearInterval(interval);
@@ -49,7 +57,7 @@ export default function RideRequests({callbackFn}) {
                 <tbody>
                     {rideRequests.map((rideRequest) => (
                         <tr key={rideRequest.uuid}>
-                            <td className='text-left'>{rideRequest.rider[0].fullname}</td>
+                            <td className='text-left'>{users.find(user => user.uuid === rideRequest.serviceUserUuid)?.fullname}</td>
                             <td className='text-left'>{rideRequest.pickupAddress}</td>
                             <td className='text-left'>{rideRequest.dropOffAddress}</td>
                             <td className='text-left'>{rideRequest.pickupRequestedTime ? 

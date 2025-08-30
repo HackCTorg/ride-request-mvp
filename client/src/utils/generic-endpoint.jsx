@@ -1,11 +1,8 @@
 export const fetchCollection = async (collectionName) => {
-    try {
-        const response = await fetch(`/api/${collectionName}`);
-        return await response.json();
-    } catch (error) {
-        console.error(`Error fetching collection ${collectionName}: `, error);
-        return [];
-    }
+    const endpoint = collectionName == "riderequests" ? `/api/riderequests/aggregate`
+        : `/api/${collectionName};`
+    const response = await fetch(endpoint);
+    return await response.json();
 }
 
 export const fetchDocument = async (collectionName, documentId) => {

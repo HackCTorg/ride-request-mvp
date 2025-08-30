@@ -23,7 +23,27 @@ function createRouter(collectionName)
         }
     });
 
+    router.get(`/aggregate`, async (req, res) => {
+        try {
+            const file = await getAggregate();
+            res.json(file);
+        } catch (error) {
+            console.error(`Error fetching file ${collectionName}:`, error);
+            res.status(500).json({ message: `Error fetching file ${collectionName}:`});
+        }
+    });
+
     router.get(`/:id`, async (req, res) => {
+        try {
+            const document = await collection.findOne({uuid: parseInt(req.params.id)});
+            res.json(document);
+        } catch (error) {
+            console.error(`Error fetching document ${req.params.id} from collection ${collectionName}`, error);
+            res.status(500).json({ message: `Error fetching document ${req.params.id} from collection ${collectionName}` });
+        }
+    });
+
+    router.get(`/:id/aggregate`, async (req, res) => {
         try {
             const document = await collection.findOne({uuid: parseInt(req.params.id)});
             res.json(document);
@@ -64,6 +84,46 @@ function createRouter(collectionName)
         const db = client.db(dbName);
         collection = db.collection(collectionName);
         await collection.createIndex({ uuid: 1 }, { unique: true });
+    }
+
+    async function getAggregate(uuid)
+    {
+        let pipeline = [];
+
+        if (uuid)
+        {
+            pipeline.push(
+                {
+                    '$match' : {
+                        'uuid' : uuid
+                    }
+                }
+            )
+        }
+
+        pipeline.push(
+            {
+                '$lookup' : {
+                    'from' : 'users',
+                    'localField' : 'serviceUserUuid',
+                    'foreignField' : 'uuid',
+                    'pipeline' : [{'$project': {'fullname': 1}}],
+                    'as' : 'rider',
+                }
+            },
+            {
+                '$lookup' : {
+                    'from' : 'providers',
+                    'localField' : 'driverUuid',
+                    'foreignField' : 'uuid',
+                    'pipeline' : [{'$project': {'fullName': 1}}],
+                    'as' : 'driver'
+                }
+            }
+        );
+
+        const rideRequestsWithRiderAndDriver = await collection.aggregate(pipeline).toArray();
+        return rideRequestsWithRiderAndDriver;
     }
 }
 
