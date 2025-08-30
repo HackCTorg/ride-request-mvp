@@ -13,7 +13,7 @@ export default function Search({ fetchDataFn, filterElementsFn, placeHolderText,
         getElements();
     }, []);
 
-    // Filter users based on search term
+    // Filter elements based on search term
     useEffect(() => {
         if (searchTerm.trim() === '') {
             setFilteredElements([]);

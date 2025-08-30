@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { createUser } from '../utils/users';
+import {createDocument} from "../utils/generic-endpoint";
 
 // Generate a random UUID
 const generateUUID = () => {
@@ -89,7 +89,7 @@ export default function UserForm({ setShowBaseForm, setShowUserForm }) {
             return;
         }
 
-        const success = await createUser(formData);
+        const success = await createDocument("users", formData);
         if (success) {
             setFormData({
                 uuid: generateUUID(),

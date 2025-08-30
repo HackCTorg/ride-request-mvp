@@ -1,33 +1,21 @@
 import { useEffect, useState } from 'react';
-import {fetchRideRequest, updateRideRequest} from '../utils/riderequest';
-import {fetchUsers} from "../utils/users";
 import DriverSearch from "./DriverSearch";
+import {fetchCollection, fetchDocument, updateDocument} from "../utils/generic-endpoint";
 
 export default function AssignDriver({selectedRideRequestId, cancelFn}) {
 
     const [selectedRideRequest, setSelectedRideRequest] = useState(selectedRideRequestId);
     const [selectedDriver, setSelectedDriver] = useState([]);
-    const [selectedVehicle, selectedVehicles] = useState([]);
     const [users, setUsers] = useState([]);
 
     const getUsers= async () => {
-
-        try {
-            const users = await fetchUsers();
-            setUsers(users);
-        } catch (error) {
-            console.error('Error fetching users:', error);
-        }
+        const users = await fetchCollection("users");
+        setUsers(users);
     }
 
     const getRideRequest= async () => {
-
-        try {
-            const rideRequest = await fetchRideRequest(selectedRideRequestId);
-            setSelectedRideRequest(rideRequest);
-        } catch (error) {
-            console.error('Error fetching users:', error);
-        }
+        const rideRequest = await fetchDocument("riderequests", selectedRideRequestId);
+        setSelectedRideRequest(rideRequest);
     }
 
     function handleDriverSelect(driver)
@@ -38,7 +26,7 @@ export default function AssignDriver({selectedRideRequestId, cancelFn}) {
     async function submitSelectedDriver()
     {
         const documentUpdate = {driverUuid: selectedDriver.uuid.toString()};
-        await updateRideRequest(selectedRideRequestId, documentUpdate);
+        await updateDocument("riderequests", selectedRideRequestId, documentUpdate);
     }
 
     useEffect(() => {

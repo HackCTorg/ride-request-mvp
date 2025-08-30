@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import {createDocument} from "../utils/generic-endpoint";
 
 const ORGANIZATIONS = ['EASTCONN', 'Generations Health'];
 
@@ -88,13 +89,7 @@ export default function CreateProvider() {
         }
 
         try {
-            const response = await fetch('/api/providers/create-provider', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(formData)
-            });
+            const response = await createDocument("providers", formData);
 
             if (response.ok) {
                 alert('Service provider created successfully!');

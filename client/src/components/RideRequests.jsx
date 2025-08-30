@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { fetchRideRequests } from '../utils/riderequest';
-import { fetchUsers } from '../utils/users';
+import {fetchCollection} from "../utils/generic-endpoint";
 
 export default function RideRequests({callbackFn}) {
 
@@ -8,33 +7,23 @@ export default function RideRequests({callbackFn}) {
     const [users, setUsers] = useState([]);
 
     const getRideRequests = async () => {
-        try {
-            console.log('Fetching ride requests...');
-            const rideRequests = await fetchRideRequests();
-            console.log('Ride requests:', rideRequests);
-            if (rideRequests) {
-                const sortedRideRequests = rideRequests.sort((a, b) => {
-                    // Sort by pickup requested time (soonest first)
-                    const timeA = new Date(a.pickupRequestedTime || 0);
-                    const timeB = new Date(b.pickupRequestedTime || 0);
-                    return timeA.getTime() - timeB.getTime();
-                });
-                setRideRequests(sortedRideRequests);
-            }
-
-        } catch (error) {
-            console.error('Error fetching ride requests:', error);
+        console.log('Fetching ride requests...');
+        const rideRequests = await fetchCollection("riderequests");
+        console.log('Ride requests:', rideRequests);
+        if (rideRequests) {
+            const sortedRideRequests = rideRequests.sort((a, b) => {
+                // Sort by pickup requested time (soonest first)
+                const timeA = new Date(a.pickupRequestedTime || 0);
+                const timeB = new Date(b.pickupRequestedTime || 0);
+                return timeA.getTime() - timeB.getTime();
+            });
+            setRideRequests(sortedRideRequests);
         }
     }
 
     const getUsers= async () => {
-
-        try {
-            const users = await fetchUsers();
-            setUsers(users);
-        } catch (error) {
-            console.error('Error fetching users:', error);
-        }
+        const users = await fetchCollection("users");
+        setUsers(users);
     }
 
     useEffect(() => {

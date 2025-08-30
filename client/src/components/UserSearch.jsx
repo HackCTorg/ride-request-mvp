@@ -1,16 +1,24 @@
-import { fetchUsers, filterUsers } from '../utils/users';
 import Search from './Search';
+import {fetchCollection} from "../utils/generic-endpoint";
 
 export default function UserSearch({ onUserSelect }) {
 
     return (
         <Search
-            fetchDataFn={fetchUsers}
+            fetchDataFn={() => fetchCollection("users")}
             filterElementsFn={filterUsers}
             renderElementFn={renderUser}
             placeHolderText="Start typing user name or ID"
         />
     )
+
+    function filterUsers(users, searchTerm)
+    {
+        users.filter(user =>
+            user.fullname.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            user.uuid.toLowerCase().includes(searchTerm.toLowerCase())
+        );
+    }
 
     function renderUser(user, handleUserSelect)
     {
