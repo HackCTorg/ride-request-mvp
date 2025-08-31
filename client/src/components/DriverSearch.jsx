@@ -1,23 +1,15 @@
 import Search from './Search';
-import {fetchCollection} from "../utils/generic-endpoint";
+import {fetchTopProviderMatches} from "../utils/database";
 
 export default function DriverSearch({onDriverSelect}) {
 
     return (
         <Search
-            fetchDataFn={() => fetchCollection("providers")}
-            filterElementsFn={filterDrivers}
+            fetchMatchesFn={fetchTopProviderMatches}
             renderElementFn={renderDriver}
             placeHolderText="Start typing driver name or ID"
         />
     )
-
-    function filterDrivers(drivers, searchTerm) {
-        return drivers.filter(driver =>
-            driver.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            driver.uuid.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }
 
     function renderDriver(driver, handleElementSelect)
     {

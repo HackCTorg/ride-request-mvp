@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import {createDocument} from "../utils/generic-endpoint";
+import {createDocument} from "../utils/database";
 
 // Generate a random UUID
 const generateUUID = () => {

@@ -1,5 +1,5 @@
 import Search from './Search';
-import {fetchCollection} from "../utils/generic-endpoint";
+import {fetchCollection} from "../utils/database";
 
 export default function VehicleSearch({onVehicleSelect}) {
 

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import {createDocument} from "../utils/generic-endpoint";
+import {createDocument} from "../utils/database";
 
 export default function RideRequestForm({ selectedUser, setShowRideRequestForm, setShowBaseForm, setShowUserForm }) {
     const [formData, setFormData] = useState({

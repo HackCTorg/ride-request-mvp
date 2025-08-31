@@ -4,15 +4,18 @@ const userSchema = new mongoose.Schema({
     uuid: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        index: "text"
     },
     fullname: {
         type: String,
         required: true,
+        index: "text"
     },
     phone: {
         type: String,
-        required: true
+        required: true,
+        index: "text"
     },
     dob: {
         type: String,

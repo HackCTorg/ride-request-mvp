@@ -1,17 +1,11 @@
 import { useState, useEffect, useRef } from 'react';
 
-export default function Search({ fetchDataFn, filterElementsFn, placeHolderText, renderElementFn }) {
+export default function Search({ fetchMatchesFn, placeHolderText, renderElementFn }) {
     const [searchTerm, setSearchTerm] = useState('');
-    const [elements, setElements] = useState([]);
     const [filteredElements, setFilteredElements] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const dropdownRef = useRef(null);
-
-    // Fetch all elements when component mounts
-    useEffect(() => {
-        getElements();
-    }, []);
 
     // Filter elements based on search term
     useEffect(() => {
@@ -19,11 +13,16 @@ export default function Search({ fetchDataFn, filterElementsFn, placeHolderText,
             setFilteredElements([]);
             setIsDropdownOpen(false);
         } else {
-            const filtered = filterElementsFn(elements, searchTerm);
-            setFilteredElements(filtered);
-            setIsDropdownOpen(filtered.length > 0);
+            setElementsToMatchesAsync(searchTerm);
         }
-    }, [searchTerm, elements]);
+    }, [searchTerm]);
+
+    async function setElementsToMatchesAsync(searchTerm)
+    {
+        const filtered = await fetchMatchesFn(searchTerm);
+        setFilteredElements(filtered);
+        setIsDropdownOpen(filtered.length > 0);
+    }
 
     // Close dropdown when clicking outside
     useEffect(() => {
@@ -38,18 +37,6 @@ export default function Search({ fetchDataFn, filterElementsFn, placeHolderText,
             document.removeEventListener('mousedown', handleClickOutside);
         };
     }, []);
-
-    const getElements = async () => {
-        try {
-            setIsLoading(true);
-            const elements = await fetchDataFn();
-            setElements(elements);
-        } catch (error) {
-            console.error('Error fetching:', error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
 
     const handleElementSelect = (element) => {
         setSearchTerm(element.fullname || element.fullName || element.displayName); //TODO: better

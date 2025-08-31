@@ -4,11 +4,13 @@ const serviceProviderSchema = new mongoose.Schema({
   uuid: {
     type: Number,
     required: true,
-    unique: true
+    unique: true,
+    index: "text"
   },
   fullName: {
     type: String,
-    required: true
+    required: true,
+    index: "text"
   },
   title: {
     type: String,
@@ -21,7 +23,8 @@ const serviceProviderSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    required: true
+    required: true,
+    index: "text"
   },
   role: {
     type: String,

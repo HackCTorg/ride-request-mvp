@@ -1,19 +1,13 @@
 import { useEffect, useState } from 'react';
 import DriverSearch from "./DriverSearch";
-import {fetchCollection, fetchDocument, updateDocument} from "../utils/generic-endpoint";
+import { fetchDocument, updateDocument} from "../utils/database";
 import VehicleSearch from "./VehicleSearch";
 
 export default function AssignDriver({selectedRideRequestId, cancelFn}) {
 
-    const [selectedRideRequest, setSelectedRideRequest] = useState(selectedRideRequestId);
+    const [selectedRideRequest, setSelectedRideRequest] = useState({rider: [{fullname:''}], pickupAddress: ''});
     const [selectedDriver, setSelectedDriver] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState([]);
-    const [users, setUsers] = useState([]);
-
-    const getUsers= async () => {
-        const users = await fetchCollection("users");
-        setUsers(users);
-    }
 
     const getRideRequest= async () => {
         const rideRequest = await fetchDocument("riderequests", selectedRideRequestId);
@@ -22,7 +16,6 @@ export default function AssignDriver({selectedRideRequestId, cancelFn}) {
 
     async function submitSelectedDriver()
     {
-        const documentUpdate = {driverUuid: selectedDriver.uuid.toString()};
         await Promise.allSettled([
             updateDocument("riderequests", selectedRideRequestId, {driverUuid: selectedDriver.uuid.toString()}),
             updateDocument("riderequests", selectedRideRequestId, {vehicleUuid: selectedVehicle.uuid.toString()})
@@ -33,7 +26,6 @@ export default function AssignDriver({selectedRideRequestId, cancelFn}) {
 
     useEffect(() => {
         getRideRequest();
-        getUsers();
         const interval = setInterval(async () => {
             getRideRequest();
         }, 5000);
@@ -50,7 +42,7 @@ export default function AssignDriver({selectedRideRequestId, cancelFn}) {
                 <p>Choose from the available Drivers and Vehicles for the days and times requested</p>
 
                 <p>Ride pickup requested for</p>
-                <p>{users.find(user => user.uuid === selectedRideRequest.serviceUserUuid)?.fullname} at {selectedRideRequest.pickupAddress}</p>
+                <p>{selectedRideRequest.rider[0].fullname} at {selectedRideRequest.pickupAddress}</p>
                 <p>{new Date(selectedRideRequest.pickupRequestedTime).toLocaleString()}</p>
 
                 <DriverSearch onDriverSelect={setSelectedDriver} />

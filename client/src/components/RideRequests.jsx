@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {fetchCollection} from "../utils/generic-endpoint";
+import {fetchCollection} from "../utils/database";
 
 export default function RideRequests({callbackFn}) {
 
