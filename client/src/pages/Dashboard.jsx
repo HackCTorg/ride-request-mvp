@@ -4,25 +4,25 @@ import AssignDriver from "../components/AssignDriver";
 
 export default function Dashboard() {
 
-    const [selectedRideRequest, setSelectedRideRequest] = useState(null);
+    const [selectedRideRequestId, setSelectedRideRequestId] = useState(null);
 
     function closeAssignDriverPanel()
     {
-        setSelectedRideRequest(null);
+        setSelectedRideRequestId(null);
     }
 
     return (
 
         <div className='bg-gray-100 h-full w-full flex flex-col'>
             <h1>ServiceProviderHome</h1>
-            {selectedRideRequest && (
+            {selectedRideRequestId && (
                 <AssignDriver
-                    selectedRideRequestId={selectedRideRequest}
+                    selectedRideRequestId={selectedRideRequestId}
                     cancelFn= {closeAssignDriverPanel}
                 />
             )}
-            {!selectedRideRequest && (
-                <RideRequests callbackFn={setSelectedRideRequest} />
+            {!selectedRideRequestId && (
+                <RideRequests callbackFn={setSelectedRideRequestId} />
             )}
         </div>
     );

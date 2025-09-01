@@ -5,6 +5,7 @@ export default function VehicleSearch({onVehicleSelect}) {
 
     return (
         <Search
+            searchElementName="vehicle"
             fetchMatchesFn={fetchTopVehicleMatches}
             renderElementFn={renderVehicle}
             placeHolderText="Start typing vehicle name or ID"

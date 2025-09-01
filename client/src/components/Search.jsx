@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 
-export default function Search({ fetchMatchesFn, placeHolderText, renderElementFn }) {
+export default function Search({ searchElementName, fetchMatchesFn, placeHolderText, renderElementFn }) {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredElements, setFilteredElements] = useState([]);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -56,7 +56,7 @@ export default function Search({ fetchMatchesFn, placeHolderText, renderElementF
     return (
         <div className="relative w-full" ref={dropdownRef}>
             <label className="block text-sm font-medium text-gray-700 mb-2">
-                Search for Existing User
+                Search for existing {searchElementName}
             </label>
             <div className="relative">
                 <input

@@ -5,6 +5,7 @@ export default function UserSearch({ onUserSelect }) {
 
     return (
         <Search
+            searchElementName="user"
             fetchMatchesFn={fetchTopUserMatches}
             renderElementFn={renderUser}
             placeHolderText="Start typing user name or ID"

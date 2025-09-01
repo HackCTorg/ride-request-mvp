@@ -5,6 +5,7 @@ export default function DriverSearch({onDriverSelect}) {
 
     return (
         <Search
+            searchElementName="driver"
             fetchMatchesFn={fetchTopProviderMatches}
             renderElementFn={renderDriver}
             placeHolderText="Start typing driver name or ID"
