@@ -1,5 +1,5 @@
 import Search from './Search';
-import {fetchCollection, fetchTopVehicleMatches} from "../utils/database";
+import { fetchTopVehicleMatches} from "../utils/database";
 
 export default function VehicleSearch({onVehicleSelect}) {
 
