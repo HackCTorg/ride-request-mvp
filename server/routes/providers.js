@@ -13,7 +13,7 @@ let providersCollection;
 async function connectDB() {
     await client.connect();
     const db = client.db(dbName);
-    providersCollection = db.collection('providers');
+    providersCollection = db.collection('service-providers');
     await providersCollection.createIndex({ uuid: 1 }, { unique: true });
 }
 
