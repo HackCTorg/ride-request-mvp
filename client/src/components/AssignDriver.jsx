@@ -17,8 +17,12 @@ export default function AssignDriver({selectedRideRequestId, cancelFn}) {
     async function submitSelectedDriver()
     {
         await Promise.allSettled([
-            updateDocument("riderequests", selectedRideRequestId, {driverUuid: selectedDriver.uuid.toString()}),
-            updateDocument("riderequests", selectedRideRequestId, {vehicleUuid: selectedVehicle.uuid.toString()})
+            updateDocument("riderequests", selectedRideRequestId, {
+                driverUuid: selectedDriver.uuid.toString(),
+                vehicleUuid: selectedVehicle.uuid.toString(),
+                rideRequestStatus: 400
+            }),
+            // updateDocument("riderequests", selectedRideRequestId, {vehicleUuid: selectedVehicle.uuid.toString()})
         ])
 
         cancelFn();
