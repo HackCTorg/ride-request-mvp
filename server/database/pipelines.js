@@ -6,7 +6,7 @@ const pipelines = {
                 'from': 'users',
                 'localField': 'serviceUserUuid',
                 'foreignField': 'uuid',
-                'pipeline': [{'$project': {'fullname': 1}}],
+                'pipeline': [{'$project': {'fullName': 1}}],
                 'as': 'rider',
             }
         },
@@ -24,7 +24,7 @@ const pipelines = {
     projectUserNameUuidAndPhone: [
         {
             '$project': {
-                'fullname': 1,
+                'fullName': 1,
                 'uuid': 1,
                 'phone': 1
             }
