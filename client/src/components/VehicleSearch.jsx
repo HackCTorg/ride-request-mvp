@@ -1,23 +1,15 @@
 import Search from './Search';
-import {fetchCollection} from "../utils/database";
+import {fetchCollection, fetchTopVehicleMatches} from "../utils/database";
 
 export default function VehicleSearch({onVehicleSelect}) {
 
     return (
         <Search
-            fetchDataFn={()=> fetchCollection("vehicles")}
-            filterElementsFn={filterVehicles}
+            fetchMatchesFn={fetchTopVehicleMatches}
             renderElementFn={renderVehicle}
             placeHolderText="Start typing vehicle name or ID"
         />
     )
-
-    function filterVehicles(vehicles, searchTerm)
-    {
-        return vehicles.filter(vehicle =>
-            vehicle.displayName.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }
 
     function renderVehicle(vehicle, handleElementSelect)
     {

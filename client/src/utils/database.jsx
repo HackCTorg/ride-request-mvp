@@ -8,6 +8,11 @@ export const fetchTopProviderMatches = async (searchTerm) => {
     return await matches.json();
 }
 
+export const fetchTopVehicleMatches = async (searchTerm) => {
+    const matches = await fetch(`/api/vehicles/fuzzy/${searchTerm}`);
+    return await matches.json();
+}
+
 export const fetchCollection = async (collectionName) => {
     const response = await fetch(`/api/${collectionName}`);
     return await response.json();

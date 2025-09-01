@@ -13,16 +13,19 @@ async function generateApi()
     let rideRequestCollection;
     let userCollection;
     let providerCollection;
+    let vehicleCollection;
 
     await Promise.all([
         databaseConnection.getCollectionAsync("ride-requests"),
         databaseConnection.getCollectionAsync("users"),
-        databaseConnection.getCollectionAsync("service-providers")
+        databaseConnection.getCollectionAsync("service-providers"),
+        databaseConnection.getCollectionAsync("vehicles")
         ]
     ).then(collections => {
         rideRequestCollection = collections[0];
         userCollection = collections[1];
         providerCollection = collections[2];
+        vehicleCollection = collections[3];
     })
 
     const api = {
@@ -38,6 +41,7 @@ async function generateApi()
         addProvider: async(provider) => await database.add(providerCollection, provider),
         fuzzyUserSearch: async(searchTerm) => await database.fuzzyUserSearch(userCollection, searchTerm),
         fuzzyProviderSearch: async(searchTerm) => await database.fuzzyProviderSearch(providerCollection, searchTerm),
+        fuzzyVehicleSearch: async(searchTerm) => await database.fuzzyVehicleSearch(vehicleCollection, searchTerm),
     }
 
     return api;

@@ -32,7 +32,17 @@ async function fuzzyProviderSearch(collection, searchTerm)
         pipelineGenerators.fuzzySearch("providerSearch", searchTerm)
             .concat(pipelines.projectProviderNameUuidAndPhone);
     const results = await collection.aggregate(pipeline).toArray();
-    return results;}
+    return results;
+}
+
+async function fuzzyVehicleSearch(collection, searchTerm)
+{
+    const pipeline =
+        pipelineGenerators.fuzzySearch("vehicleSearch", searchTerm)
+            .concat(pipelines.projectVehicleNameUuiAndFleetId);
+    const results = await collection.aggregate(pipeline).toArray();
+    return results;
+}
 
 async function fuzzySearch(collection, searchTerm, indexField) {
     const results = await collection.aggregate(pipelineGenerators.fuzzySearch(indexField, searchTerm))
@@ -62,6 +72,7 @@ module.exports = {
     update,
     fuzzyUserSearch,
     fuzzyProviderSearch,
+    fuzzyVehicleSearch,
     getRideRequestWithUserAndProviderData,
     getRideRequestsWithUserAndProviderData,
     getByUuidString

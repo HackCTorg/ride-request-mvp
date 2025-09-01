@@ -21,6 +21,16 @@ const pipelines = {
         }
     ],
 
+    projectVehicleNameUuiAndFleetId: [
+        {
+            '$project': {
+                'displayName': 1,
+                'uuid': 1,
+                'fleetId': 1
+            }
+        }
+    ],
+
     projectUserNameUuidAndPhone: [
         {
             '$project': {

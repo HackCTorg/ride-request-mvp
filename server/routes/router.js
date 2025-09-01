@@ -55,6 +55,10 @@ function createRouter(api)
         res.json(await api.addProvider(req.body));
     });
 
+    router.get(`/vehicles/fuzzy/:searchTerm`, async (req, res) => {
+        res.json(await api.fuzzyVehicleSearch(req.params.searchTerm));
+    });
+
 
     return router;
 }
