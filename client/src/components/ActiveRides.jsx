@@ -57,7 +57,7 @@ export default function ActiveRides({callbackFn}) {
                 <tbody>
                     {rideRequests.map((rideRequest) => (
                         <tr key={rideRequest.uuid}>
-                            <td className='text-left'>{users.find(user => user.uuid === rideRequest.serviceUserUuid)?.fullname}</td>
+                            <td className='text-left'>{users.find(user => user.uuid === rideRequest.serviceUserUuid)?.fullName}</td>
                             <td className='text-left'>{rideRequest.pickupAddress}</td>
                             <td className='text-left'>{rideRequest.dropOffAddress}</td>
                             <td className='text-left'>{rideRequest.pickupRequestedTime ? 

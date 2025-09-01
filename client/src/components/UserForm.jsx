@@ -13,7 +13,7 @@ const generateUUID = () => {
 export default function UserForm({ setShowBaseForm, setShowUserForm }) {
     const [formData, setFormData] = useState({
         uuid: generateUUID(),
-        fullname: '',
+        fullName: '',
         phone: '',
         dob: '',
         race: '',
@@ -69,7 +69,7 @@ export default function UserForm({ setShowBaseForm, setShowUserForm }) {
         const newErrors = {};
 
         if (!formData.uuid.trim()) newErrors.uuid = 'UUID is required';
-        if (!formData.fullname.trim()) newErrors.fullname = 'Full name is required';
+        if (!formData.fullName.trim()) newErrors.fullName = 'Full name is required';
         if (!formData.phone.trim()) newErrors.phone = 'Phone number is required';
         if (!formData.dob.trim()) newErrors.dob = 'Date of birth is required';
         if (!formData.race) newErrors.race = 'Race selection is required';
@@ -93,7 +93,7 @@ export default function UserForm({ setShowBaseForm, setShowUserForm }) {
         if (success) {
             setFormData({
                 uuid: generateUUID(),
-                fullname: '',
+                fullName: '',
                 phone: '',
                 dob: '',
                 race: '',
@@ -137,15 +137,15 @@ export default function UserForm({ setShowBaseForm, setShowUserForm }) {
                         </label>
                         <input
                             type="text"
-                            name="fullname"
-                            value={formData.fullname}
+                            name="fullName"
+                            value={formData.fullName}
                             onChange={handleInputChange}
                             className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 ${
-                                errors.fullname ? 'border-red-500' : 'border-gray-300'
+                                errors.fullName ? 'border-red-500' : 'border-gray-300'
                             }`}
                             placeholder="Enter full name"
                         />
-                        {errors.fullname && <p className="text-red-500 text-sm mt-1">{errors.fullname}</p>}
+                        {errors.fullName && <p className="text-red-500 text-sm mt-1">{errors.fullName}</p>}
                     </div>
 
                     <div>

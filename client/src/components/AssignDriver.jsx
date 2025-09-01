@@ -5,7 +5,7 @@ import VehicleSearch from "./VehicleSearch";
 
 export default function AssignDriver({selectedRideRequestId, cancelFn}) {
 
-    const [selectedRideRequest, setSelectedRideRequest] = useState({rider: [{fullname:''}], pickupAddress: ''});
+    const [selectedRideRequest, setSelectedRideRequest] = useState({rider: [{fullName:''}], pickupAddress: ''});
     const [selectedDriver, setSelectedDriver] = useState([]);
     const [selectedVehicle, setSelectedVehicle] = useState([]);
 
@@ -42,7 +42,7 @@ export default function AssignDriver({selectedRideRequestId, cancelFn}) {
                 <p>Choose from the available Drivers and Vehicles for the days and times requested</p>
 
                 <p>Ride pickup requested for</p>
-                <p>{selectedRideRequest.rider[0].fullname} at {selectedRideRequest.pickupAddress}</p>
+                <p>{selectedRideRequest.rider[0].fullName} at {selectedRideRequest.pickupAddress}</p>
                 <p>{new Date(selectedRideRequest.pickupRequestedTime).toLocaleString()}</p>
 
                 <DriverSearch onDriverSelect={setSelectedDriver} />

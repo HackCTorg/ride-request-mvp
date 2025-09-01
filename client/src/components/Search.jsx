@@ -39,7 +39,7 @@ export default function Search({ fetchMatchesFn, placeHolderText, renderElementF
     }, []);
 
     const handleElementSelect = (element) => {
-        setSearchTerm(element.fullname || element.fullName || element.displayName); //TODO: better
+        setSearchTerm(element.fullName || element.displayName); //TODO: better
         setIsDropdownOpen(false);
     };
 

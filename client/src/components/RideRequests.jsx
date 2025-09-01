@@ -49,7 +49,7 @@ export default function RideRequests({callbackFn}) {
                 <tbody>
                     {rideRequests.map((rideRequest) => (
                         <tr key={rideRequest.uuid}>
-                            <td className='text-left'>{rideRequest.rider[0].fullname}</td>
+                            <td className='text-left'>{rideRequest.rider[0].fullName}</td>
                             <td className='text-left'>{rideRequest.pickupAddress}</td>
                             <td className='text-left'>{rideRequest.dropOffAddress}</td>
                             <td className='text-left'>{rideRequest.pickupRequestedTime ? 

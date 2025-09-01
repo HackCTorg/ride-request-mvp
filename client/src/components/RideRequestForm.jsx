@@ -25,7 +25,7 @@ export default function RideRequestForm({ selectedUser, setShowRideRequestForm, 
         if (selectedUser) {
             setFormData(prev => ({
                 ...prev,
-                riderName: selectedUser.fullname,
+                riderName: selectedUser.fullName,
                 riderPickupBaseAddress: selectedUser.residence?.current || selectedUser.residence?.last || ''
             }));
         }
@@ -134,7 +134,7 @@ export default function RideRequestForm({ selectedUser, setShowRideRequestForm, 
                 {/* Rider Information */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
-                            <h1>Rider Name: {selectedUser.fullname}</h1>
+                            <h1>Rider Name: {selectedUser.fullName}</h1>
                         </div>
 
                         <div>
