@@ -15,9 +15,9 @@ async function generateApi()
     let providerCollection;
 
     await Promise.all([
-        databaseConnection.getCollectionAsync("riderequests"),
+        databaseConnection.getCollectionAsync("ride-requests"),
         databaseConnection.getCollectionAsync("users"),
-        databaseConnection.getCollectionAsync("providers")
+        databaseConnection.getCollectionAsync("service-providers")
         ]
     ).then(collections => {
         rideRequestCollection = collections[0];
