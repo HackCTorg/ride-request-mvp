@@ -205,7 +205,7 @@ const getStatusByCode = (code) => {
 // Get status description by code
 const getStatusDescription = (code) => {
   const status = getStatusByCode(code);
-  return status ? status.description : 'Unknown Status';
+  return status ? status.description : 'Unknown Status Description';
 };
 
 // Get status ordinal by code
@@ -217,7 +217,7 @@ const getStatusOrdinal = (code) => {
 // Get status category by code
 const getStatusCategory = (code) => {
   const status = getStatusByCode(code);
-  return status ? status.category : 'UNKNOWN';
+  return status ? status.category : 'Unknown Status Category';
 };
 
 // Get all statuses ordered by ordinal
