@@ -2,19 +2,18 @@
 
 ## Installation Steps
 
-(On Linux - if using Homebrew, please utilize appropriate commands)
+(On Linux - if using Homebrew, please utilize appropriate package manager commands)
 * sudo apt update
 * sudo apt install npm nodejs
 * npm install
-* node server/index.js
-
-Create an account on MongoDB Atlas. Set it up as a Free learning
-account. Pick Node.js and create database user, then Select Drivers
-and you'll get the connection string and password you need to copy.
 
 Optional: npm install mongodb
 
 ## MongoDB Instructions
+
+Create an account on MongoDB Atlas. Set it up as a Free learning
+account. Pick Node.js and create database user, then Select Drivers
+and you'll get the connection string and password you need to copy.
 
 Switching MongoDB Accounts:
 * Log into MongoDB Atlas
@@ -31,3 +30,10 @@ Updating the .env file:
 * Copy the connection string
 * Paste the string as the MONGO_URI in the .env - Note that you will need to fill in the <db_password> in the string, this will be given to you when you make the cluster, so keep it somewhere
 * The database name variable in the .env should remain "database" unless you choose to change it
+
+
+## Start The Application
+
+* npm run dev
+
+Then point your web browser at http://localhost:3001/
