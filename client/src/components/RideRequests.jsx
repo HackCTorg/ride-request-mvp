@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import {fetchCollection} from "../utils/database";
+import AssignedRideStatus from "./AssignedRideStatus";
 
 export default function RideRequests({callbackFn}) {
 
     const [rideRequests, setRideRequests] = useState([]);
-    const [activeRides, setActiveRides] = useState([]);
+    const [assignedRides, setAssignedRides] = useState([]);
 
     let fetchInterval;
 
@@ -17,23 +18,23 @@ export default function RideRequests({callbackFn}) {
             const rideReqsSortedByRrStatus = rideRequests.sort((a, b) => a.rideRequestStatus - b.rideRequestStatus);
             const length = rideReqsSortedByRrStatus.length;
 
-            let pivotIndex = rideReqsSortedByRrStatus.findIndex(rr => parseInt(rr.rideRequestStatus) === 400);
+            let pivotIndex = rideReqsSortedByRrStatus.findIndex(rr => parseInt(rr.rideRequestStatus) >= 400);
 
-            let nonActiveRideReqs, activeRides;
+            let nonActiveRideReqs, assignedRides;
 
             if (pivotIndex < 0)
             {
                 nonActiveRideReqs = rideReqsSortedByRrStatus;
-                activeRides = [];
+                assignedRides = [];
             }
             else
             {
                 nonActiveRideReqs = rideReqsSortedByRrStatus.slice(0, pivotIndex);
-                activeRides = rideReqsSortedByRrStatus.slice(pivotIndex, length);
+                assignedRides = rideReqsSortedByRrStatus.slice(pivotIndex, length);
             }
 
             setRideRequests(nonActiveRideReqs);
-            setActiveRides(activeRides);
+            setAssignedRides(assignedRides);
         }
     }
 
@@ -87,7 +88,7 @@ export default function RideRequests({callbackFn}) {
             <br/>
             <br/>
 
-            <h1 className='text-xl font-bold'>Active Rides</h1>
+            <h1 className='text-xl font-bold'>Assigned Rides</h1>
             <hr className='my-2 border-gray-300'/>
             <div className='flex flex-col gap-4'>
                 <table>
@@ -103,7 +104,7 @@ export default function RideRequests({callbackFn}) {
                     </tr>
                     </thead>
                     <tbody>
-                    {activeRides.map((ride) => (
+                    {assignedRides.map((ride) => (
                         <tr key={ride.uuid}>
                             <td className='text-left'>{ride.rider[0].fullName}</td>
                             <td className='text-left'>{ride.pickupAddress}</td>
@@ -114,7 +115,13 @@ export default function RideRequests({callbackFn}) {
                                 }
                             </td>
                             <td className='text-left'>{ride.driver.phone}</td>
-                            <td className='text-left'><button>PUSH THE BUTTON</button></td>
+                            <td className='text-left'>
+                                <AssignedRideStatus
+                                    startRideFn={console.log}
+                                    rideRequestStatus={ride.rideRequestStatus}
+                                    rideStatus={ride.rideStatus}
+                                />
+                            </td>
                             <td className='text-left'>{ride.rider[0].phone}</td>
                         </tr>
                     ))}
