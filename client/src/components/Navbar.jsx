@@ -33,6 +33,12 @@ const Navbar = () => {
             >
               Service Provider
             </Link>
+            <Link
+                to="/vehicle"
+                className="text-gray-600 hover:text-primary-600 transition-colors"
+            >
+              VehicleHome
+            </Link>
           </div>
         </div>
       </div>

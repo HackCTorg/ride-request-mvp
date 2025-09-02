@@ -2,12 +2,13 @@ import { useEffect, useState } from 'react';
 import DriverSearch from "./DriverSearch";
 import { fetchDocument, updateDocument} from "../utils/database";
 import VehicleSearch from "./VehicleSearch";
+import ConditionallyActiveButton from "./ConditionallyActiveButton";
 
 export default function AssignDriver({selectedRideRequestId, cancelFn}) {
 
     const [selectedRideRequest, setSelectedRideRequest] = useState({rider: [{fullName:''}], pickupAddress: ''});
-    const [selectedDriver, setSelectedDriver] = useState([]);
-    const [selectedVehicle, setSelectedVehicle] = useState([]);
+    const [selectedDriver, setSelectedDriver] = useState();
+    const [selectedVehicle, setSelectedVehicle] = useState();
 
     const getRideRequest= async () => {
         const rideRequest = await fetchDocument("riderequests", selectedRideRequestId);
@@ -16,14 +17,11 @@ export default function AssignDriver({selectedRideRequestId, cancelFn}) {
 
     async function submitSelectedDriver()
     {
-        await Promise.allSettled([
-            updateDocument("riderequests", selectedRideRequestId, {
-                driverUuid: selectedDriver.uuid.toString(),
-                vehicleUuid: selectedVehicle.uuid.toString(),
-                rideRequestStatus: 400
-            }),
-            // updateDocument("riderequests", selectedRideRequestId, {vehicleUuid: selectedVehicle.uuid.toString()})
-        ])
+        await updateDocument("riderequests", selectedRideRequestId, {
+            driverUuid: selectedDriver.uuid.toString(),
+            vehicleUuid: selectedVehicle.uuid.toString(),
+            rideRequestStatus: 400
+        });
 
         cancelFn();
     }
@@ -53,16 +51,19 @@ export default function AssignDriver({selectedRideRequestId, cancelFn}) {
 
                 <VehicleSearch onVehicleSelect={setSelectedVehicle} />
 
-                {selectedDriver && selectedVehicle && (
                     <div className='flex flex-row gap-4 w-full '>
                         <button
                             onClick={cancelFn}
-                            className='bg-gray-300 hover:bg-gray-400 text-gray-800 p-2 text-md rounded-md w-[50%]'>Cancel</button>
-                        <button
-                            onClick={submitSelectedDriver}
-                            className='bg-blue-500 hover:bg-blue-600 text-white p-2 text-md rounded-md w-[50%]'>Submit</button>
+                            className='bg-gray-300 hover:bg-gray-400 text-gray-800 p-2 text-md rounded-md w-[50%]'>
+                            Cancel
+                        </button>
+                        <ConditionallyActiveButton
+                            onClickFn={submitSelectedDriver}
+                            isEnabled={selectedDriver && selectedVehicle}
+                            text="Submit"
+                        />
                     </div>
-                )}
+
             </div>
         </div>
     );

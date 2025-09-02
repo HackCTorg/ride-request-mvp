@@ -42,6 +42,7 @@ async function generateApi()
         fuzzyUserSearch: async(searchTerm) => await database.fuzzyUserSearch(userCollection, searchTerm),
         fuzzyProviderSearch: async(searchTerm) => await database.fuzzyProviderSearch(providerCollection, searchTerm),
         fuzzyVehicleSearch: async(searchTerm) => await database.fuzzyVehicleSearch(vehicleCollection, searchTerm),
+        addVehicle: async (vehicle) => await database.add(vehicleCollection, vehicle)
     }
 
     return api;

@@ -1,11 +1,11 @@
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import { AuthProvider, useAuth } from './contexts/AuthContext'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { AuthProvider } from './contexts/AuthContext'
 import Navbar from './components/Navbar'
-import Home from './pages/Home'
 import ServiceProviderHome from './pages/ServiceProviderHome'
 import Dashboard from './pages/Dashboard'
 import UserHome from './pages/UserHome'
+import VehicleHome from "./pages/VehicleHome";
 
 
 function AppRoutes() {
@@ -17,6 +17,7 @@ function AppRoutes() {
           <Routes>
             <Route path="/" element={<UserHome />} />
             <Route path="/service-provider" element={<ServiceProviderHome />} />
+            <Route path="/vehicle" element={<VehicleHome />} />
             <Route path="/dashboard" element={<Dashboard />} />
           </Routes>
         </main>
