@@ -1,4 +1,5 @@
 import {rideStatuses} from "../constants/rideRequestStatuses";
+import {styles} from "../../../server/style/styles";
 
 export default function AssignedRideStatus({onClickFn, rideRequestStatus, rideStatus}) {
 
@@ -6,7 +7,7 @@ export default function AssignedRideStatus({onClickFn, rideRequestStatus, rideSt
 
     if (rideRequestStatus === 1000 && rideStatus === 100 ) {
         output = (
-            <button onClick={onClickFn}>Start Ride</button>
+            <button onClick={onClickFn} className={styles.enabledButton}>Start Ride</button>
         );
     }
     else

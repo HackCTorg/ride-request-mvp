@@ -68,8 +68,8 @@ export default function CreateVehicle() {
 
     return (
         <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6">Create Service Provider</h2>
-            <p className="text-gray-600 mb-6">Fill in the information to create a new service provider</p>
+            <h2 className="text-2xl font-bold text-gray-800 mb-6">Create Vehicle</h2>
+            <p className="text-gray-600 mb-6">Fill in the information to create a new vehicle</p>
 
             <form onSubmit={handleSubmit} className="space-y-6">
 

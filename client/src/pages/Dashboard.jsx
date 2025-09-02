@@ -14,7 +14,7 @@ export default function Dashboard() {
     return (
 
         <div className='bg-gray-100 h-full w-full flex flex-col'>
-            <h1>ServiceProviderHome</h1>
+            <h1>Dashboard</h1>
             {selectedRideRequestId && (
                 <AssignDriver
                     selectedRideRequestId={selectedRideRequestId}

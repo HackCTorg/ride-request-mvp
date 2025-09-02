@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import {fetchCollection, updateDocument} from "../utils/database";
 import AssignedRideStatus from "./AssignedRideStatus";
+import {styles} from "../../../server/style/styles";
 
 export default function RideRequests({callbackFn}) {
 
@@ -80,10 +81,14 @@ export default function RideRequests({callbackFn}) {
                                 'No pickup time set'
                             }</td>
                             <td className='text-left'>
-                                <button onClick={() => callbackFn(rideRequest.uuid)}>Assign driver</button>
+                                <button onClick={() => callbackFn(rideRequest.uuid)} className={styles.enabledButton}>
+                                    Assign driver
+                                </button>
                             </td>
                             <td className='text-left'>
-                                <button>Assign vehicle</button>
+                                <button onClick={() => callbackFn(rideRequest.uuid)} className={styles.enabledButton}>
+                                    Assign vehicle
+                                </button>
                             </td>
                         </tr>
                     ))}

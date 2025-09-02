@@ -4,7 +4,7 @@ import { AuthProvider } from './contexts/AuthContext'
 import Navbar from './components/Navbar'
 import ServiceProviderHome from './pages/ServiceProviderHome'
 import Dashboard from './pages/Dashboard'
-import UserHome from './pages/UserHome'
+import CreateRideRequest from './pages/CreateRideRequest'
 import VehicleHome from "./pages/VehicleHome";
 
 
@@ -15,7 +15,7 @@ function AppRoutes() {
         <Navbar />
         <main className="container mx-auto px-4 py-8">
           <Routes>
-            <Route path="/" element={<UserHome />} />
+            <Route path="/" element={<CreateRideRequest />} />
             <Route path="/service-provider" element={<ServiceProviderHome />} />
             <Route path="/vehicle" element={<VehicleHome />} />
             <Route path="/dashboard" element={<Dashboard />} />

@@ -25,19 +25,19 @@ const Navbar = () => {
               to="/" 
               className="text-gray-600 hover:text-primary-600 transition-colors"
             >
-              Home
+              Create Ride Request
             </Link>
             <Link 
               to="/service-provider" 
               className="text-gray-600 hover:text-primary-600 transition-colors"
             >
-              Service Provider
+              Create Service Provider
             </Link>
             <Link
                 to="/vehicle"
                 className="text-gray-600 hover:text-primary-600 transition-colors"
             >
-              VehicleHome
+              Create Vehicle
             </Link>
           </div>
         </div>
