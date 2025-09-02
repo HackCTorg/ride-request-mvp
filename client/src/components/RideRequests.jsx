@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import {fetchCollection} from "../utils/database";
+import {fetchCollection, updateDocument} from "../utils/database";
 import AssignedRideStatus from "./AssignedRideStatus";
 
 export default function RideRequests({callbackFn}) {
@@ -8,6 +8,12 @@ export default function RideRequests({callbackFn}) {
     const [assignedRides, setAssignedRides] = useState([]);
 
     let fetchInterval;
+
+    function startRide(assignedRide)
+    {
+        updateDocument("riderequests", assignedRide.uuid, {rideStatus: 200})
+            .then(() => {getRideRequests()});
+    }
 
     const getRideRequests = async () => {
         console.log('Fetching ride requests...');
@@ -117,7 +123,7 @@ export default function RideRequests({callbackFn}) {
                             <td className='text-left'>{ride.driver.phone}</td>
                             <td className='text-left'>
                                 <AssignedRideStatus
-                                    startRideFn={console.log}
+                                    onClickFn={() => startRide(ride)}
                                     rideRequestStatus={ride.rideRequestStatus}
                                     rideStatus={ride.rideStatus}
                                 />
