@@ -25,7 +25,7 @@ export default function DriverSearch({onDriverSelect}) {
             >
                 <div className="font-medium text-gray-900">{driver.fullName}</div>
                 <div className="text-sm text-gray-500">
-                    UUID: {driver.uuid} • Phone: {driver.phone}
+                    UUID: {driver.uuid} • Phone: {driver.mobilePhone}
                 </div>
             </div>
         )

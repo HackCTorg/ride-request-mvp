@@ -12,10 +12,10 @@ const pipelines = {
         },
         {
             '$lookup': {
-                'from': 'providers',
+                'from': 'service-providers',
                 'localField': 'driverUuid',
                 'foreignField': 'uuid',
-                'pipeline': [{'$project': {'fullName': 1, 'phone': 1}}],
+                'pipeline': [{'$project': {'fullName': 1, 'mobilePhone': 1}}],
                 'as': 'driver'
             }
         }
@@ -46,7 +46,7 @@ const pipelines = {
             '$project': {
                 'fullName': 1,
                 'uuid': 1,
-                'phone': 1
+                'mobilePhone': 1
             }
         }
     ]

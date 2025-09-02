@@ -120,7 +120,7 @@ export default function RideRequests({callbackFn}) {
                                 'No pickup time set'
                                 }
                             </td>
-                            <td className='text-left'>{ride.driver.phone}</td>
+                            <td className='text-left'>{ride.driver[0].mobilePhone}</td>
                             <td className='text-left'>
                                 <AssignedRideStatus
                                     onClickFn={() => startRide(ride)}

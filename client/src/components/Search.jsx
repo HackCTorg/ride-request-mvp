@@ -17,6 +17,7 @@ export default function Search({ searchElementName, fetchMatchesFn, placeHolderT
         }
     }, [searchTerm]);
 
+    // Possible race conditions if network lags?
     async function setElementsToMatchesAsync(searchTerm)
     {
         const filtered = await fetchMatchesFn(searchTerm);
