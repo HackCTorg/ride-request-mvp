@@ -53,6 +53,17 @@ const pipelines = {
 }
 
 const pipelineGenerators = {
+
+    projectFields: (fieldNames) => {
+        const projectObject = fieldNames.reduce((acc, fieldName) => {
+            acc[fieldName] = 1;
+            return acc;
+        }, {});
+        return {
+            '$project': projectObject
+        };
+    },
+
     fuzzySearch: (indexField, searchTerm) => [
         {
             $search: {

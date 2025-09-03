@@ -23,16 +23,23 @@ function createRouter(api)
     });
 
     router.get(`/users`, async (req, res) => {
-        const asdf = await api.getUsers();
-        res.json(asdf);
+        res.json(await api.getUsers());
     });
 
     router.get(`/users/:id`, async (req, res) => {
         res.json(await api.getUser(req.params.id));
     });
 
+    router.get(`/users/:id/fields/:fields`, async (req, res) => {
+        res.json(await api.getSpecifiedFieldsOfUser(req.params.id, req.params.fields.split(',')));
+    });
+
     router.post(`/users`, async (req, res) => {
         res.json(await api.addUser(req.body));
+    });
+
+    router.get(`/users/fields/:fields`, async (req, res) => {
+        res.json(await api.getSpecifiedFieldsOfUsers(req.params.fields.split(',')));
     });
 
     router.get(`/users/fuzzy/:searchTerm`, async (req, res) => {

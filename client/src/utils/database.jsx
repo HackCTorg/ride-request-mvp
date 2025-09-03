@@ -23,6 +23,11 @@ export const fetchDocument = async (collectionName, documentId) => {
     return await response.json();
 }
 
+export const fetchFieldsOfDocument = async (collectionName, documentId, fieldNames) => {
+    const response = await fetch(`/api/${collectionName}/${documentId}/fields/${fieldNames.join(',')}`);
+    return await response.json();
+}
+
 export const createDocument = async (collectionName, document) => {
     return await fetch(`/api/${collectionName}`, {
         method: 'POST',

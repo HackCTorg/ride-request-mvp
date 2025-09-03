@@ -66,6 +66,19 @@ async function getByUuidString(collection, uuid)
     return await collection.findOne({uuid: parseInt(uuid)})
 }
 
+async function getSpecifiedFieldsOfDocument(collection, uuid, fields)
+{
+    const pipeline = pipelineGenerators.matchUuid(uuid).concat(pipelineGenerators.projectFields(fields));
+    const results = await collection.aggregate(pipeline).toArray();
+    return results[0];
+}
+
+async function getSpecifiedFieldsOfCollection(collection, fields)
+{
+    const pipeline = pipelineGenerators.projectFields(fields);
+    return await collection.aggregate(pipeline).toArray();
+}
+
 module.exports = {
     getCollection,
     add,
@@ -75,5 +88,7 @@ module.exports = {
     fuzzyVehicleSearch,
     getRideRequestWithUserAndProviderData,
     getRideRequestsWithUserAndProviderData,
-    getByUuidString
+    getByUuidString,
+    getSpecifiedFieldsOfDocument,
+    getSpecifiedFieldsOfCollection
 };

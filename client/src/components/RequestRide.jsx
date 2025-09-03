@@ -2,6 +2,7 @@ import { useState } from 'react';
 import UserForm from './UserForm';
 import UserSearch from './UserSearch';
 import RideRequestForm from './RideRequestForm';
+import {fetchFieldsOfDocument} from "../utils/database";
 
 export default function RequestRide() {
     const [selectedUser, setSelectedUser] = useState(null);
@@ -9,10 +10,13 @@ export default function RequestRide() {
     const [showRideRequestForm, setShowRideRequestForm] = useState(false);
     const [showUserForm, setShowUserForm] = useState(false);
 
-    const handleUserSelect = (user) => {
-        setSelectedUser(user);
+
+    async function handleUserSelect(user)
+    {
+        const userInfo = await fetchFieldsOfDocument("users", user.uuid, ["uuid", "fullName", "residence"]);
+        setSelectedUser(userInfo);
         console.log('Selected user:', user);
-    };
+    }
 
     return (
         <div className='flex flex-col gap-4 w-full justify-center items-center'>
