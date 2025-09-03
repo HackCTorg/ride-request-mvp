@@ -1,4 +1,4 @@
-import {styles} from "../../../server/style/styles";
+import {styles} from "../../style/styles";
 
 export default function ConditionallyActiveButton({onClickFn, text, isEnabled}) {
 

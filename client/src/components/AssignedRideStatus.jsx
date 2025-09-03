@@ -1,5 +1,5 @@
 import {rideStatuses} from "../constants/rideRequestStatuses";
-import {styles} from "../../../server/style/styles";
+import {styles} from "../../style/styles";
 
 export default function AssignedRideStatus({onClickFn, rideRequestStatus, rideStatus}) {
 

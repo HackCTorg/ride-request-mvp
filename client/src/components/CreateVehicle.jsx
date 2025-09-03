@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import {useEffect, useState} from 'react';
 import {createDocument} from "../utils/database";
 import FormTextEntryField from "./FormTextEntryField";
 import ConditionallyActiveButton from "./ConditionallyActiveButton";
@@ -14,13 +14,13 @@ export default function CreateVehicle() {
     });
     const [formIsReady, setFormIsReady] = useState(false);
 
-    function isEveryFieldFilledIn()
+    function isEveryFieldFilledIn(form)
     {
-        const propertyNames = Object.getOwnPropertyNames(formData);
+        const propertyNames = Object.getOwnPropertyNames(form);
         let allFieldsAreFilledIn = true;
         for (let propertyName of propertyNames)
         {
-            if (formData[propertyName] === '')
+            if (form[propertyName] === '')
             {
                 allFieldsAreFilledIn = false;
                 break;
@@ -30,13 +30,18 @@ export default function CreateVehicle() {
         return allFieldsAreFilledIn;
     }
 
+    useEffect(() =>
+        {
+            setFormIsReady(isEveryFieldFilledIn(formData));
+        }, [formData]
+    );
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
             ...prev,
             [name]: value
         }));
-        setFormIsReady(isEveryFieldFilledIn());
     };
 
     const handleSubmit = async (e) => {
