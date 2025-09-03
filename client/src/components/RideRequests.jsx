@@ -74,8 +74,8 @@ export default function RideRequests({callbackFn}) {
                     {rideRequests.map((rideRequest) => (
                         <tr key={rideRequest.uuid}>
                             <td className='text-left'>{rideRequest.rider[0].fullName}</td>
-                            <td className='text-left'><a target="_blank" rel="noopener noreferrer" href={`https://www.google.com/maps/search/${rideRequest.pickupAddress}`}>{rideRequest.pickupAddress}</a></td>
-                            <td className='text-left'><a target="_blank" rel="noopener noreferrer" href={`https://www.google.com/maps/search/${rideRequest.dropOffAddress}`}>{rideRequest.dropOffAddress}</a></td>
+                            <td className='text-left text-primary-700'><a target="_blank" rel="noopener noreferrer" href={`https://www.google.com/maps/search/${rideRequest.pickupAddress}`}>{rideRequest.pickupAddress}</a></td>
+                            <td className='text-left text-primary-700'><a target="_blank" rel="noopener noreferrer" href={`https://www.google.com/maps/search/${rideRequest.dropOffAddress}`}>{rideRequest.dropOffAddress}</a></td>
                             <td className='text-left'>{rideRequest.pickupRequestedTime ?
                                 new Date(rideRequest.pickupRequestedTime).toLocaleString() :
                                 'No pickup time set'
