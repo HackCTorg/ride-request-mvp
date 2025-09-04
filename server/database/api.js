@@ -1,21 +1,20 @@
 require('dotenv').config();
 const database = require("./database");
-const getDatabaseConnectionAsync = require("./connection");
+const {getDatabaseConnectionAsync, configSearchIndex} = require("./setup");
 
 
 async function generateApi()
 {
     const dbUri = process.env.MONGODB_URI;
-    const dbName = process.env.DB_NAME;
 
-    const databaseConnection = await getDatabaseConnectionAsync(dbUri, dbName);
+    const databaseConnection = await getDatabaseConnectionAsync(dbUri);
 
     let rideRequestCollection;
     let userCollection;
     let providerCollection;
     let vehicleCollection;
 
-    await Promise.all([
+    const collections = await Promise.all([
         databaseConnection.getCollectionAsync("ride-requests"),
         databaseConnection.getCollectionAsync("users"),
         databaseConnection.getCollectionAsync("service-providers"),
@@ -26,7 +25,17 @@ async function generateApi()
         userCollection = collections[1];
         providerCollection = collections[2];
         vehicleCollection = collections[3];
-    })
+
+        return Promise.resolve({rideRequestCollection, userCollection, providerCollection, vehicleCollection});
+    });
+
+    console.log(`Configuring search indexes... (This step may take a minute)`);
+
+    await Promise.all([
+        configSearchIndex(collections.vehicleCollection, 'vehicleSearch'),
+        configSearchIndex(collections.userCollection, 'userSearch'),
+        configSearchIndex(collections.providerCollection, 'providerSearch'),
+    ]);
 
     const api = {
         getRideRequest: async(uuid) => await database.getRideRequestWithUserAndProviderData(rideRequestCollection, uuid),

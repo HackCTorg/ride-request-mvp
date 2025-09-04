@@ -91,6 +91,7 @@ export default function UserForm({ setShowBaseForm, setShowUserForm }) {
 
         const success = await createDocument("users", formData);
         if (success) {
+            alert('User created successfully!');
             setFormData({
                 uuid: generateUUID(),
                 fullName: '',
@@ -105,7 +106,6 @@ export default function UserForm({ setShowBaseForm, setShowUserForm }) {
                 disabilityStatus: ''
             });
             setErrors({});
-            setShowBaseForm(true);
         }
 
     };
