@@ -9,32 +9,20 @@ async function generateApi()
 
     const databaseConnection = await getDatabaseConnectionAsync(dbUri);
 
-    let rideRequestCollection;
-    let userCollection;
-    let providerCollection;
-    let vehicleCollection;
-
-    const collections = await Promise.all([
+    const [rideRequestCollection, userCollection, providerCollection, vehicleCollection] = await Promise.all([
         databaseConnection.getCollectionAsync("ride-requests"),
         databaseConnection.getCollectionAsync("users"),
         databaseConnection.getCollectionAsync("service-providers"),
         databaseConnection.getCollectionAsync("vehicles")
         ]
-    ).then(collections => {
-        rideRequestCollection = collections[0];
-        userCollection = collections[1];
-        providerCollection = collections[2];
-        vehicleCollection = collections[3];
-
-        return Promise.resolve({rideRequestCollection, userCollection, providerCollection, vehicleCollection});
-    });
+    );
 
     console.log(`Configuring search indexes... (This step may take a minute)`);
 
     await Promise.all([
-        configSearchIndex(collections.vehicleCollection, 'vehicleSearch'),
-        configSearchIndex(collections.userCollection, 'userSearch'),
-        configSearchIndex(collections.providerCollection, 'providerSearch'),
+        configSearchIndex(vehicleCollection, 'vehicleSearch'),
+        configSearchIndex(userCollection, 'userSearch'),
+        configSearchIndex(providerCollection, 'providerSearch'),
     ]);
 
     const api = {
